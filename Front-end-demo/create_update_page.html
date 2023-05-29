@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon1/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon1/favicon-16x16.png">
+    <meta name="msapplication-TileColor" content="#ffc40d">
+    <meta name="theme-color" content="#ffffff">
+    <title>JobHunt.com//Edit data</title>
+    <link rel="stylesheet" href="css/admin_page.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body id="bdy_edit_pge">
+    <div class="topnav" id="myTopnav">
+
+        <a href="./admin_page.html" class="active"><img src="./images/logo/jobHunt1.com.png" alt=""></a>
+
+        <a href="./admin_page.html" class="content">Administrative</a>
+        <a href="#news" class="content">Term of Use</a>
+        <a href="./index.html" class="content">Visit Our Website</a>
+        <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
+    </div>
+
+    <div class="main">
+
+    </div>
+
+</body>
+
+<script src="js/create_update_page.js"></script>
+<script>
+    var form = new Validator('#edit_form');
+    form.onSubmit = function(formData) {
+        console.log(formData);
+    };
+</script>
+
+<script>
+    getDataThanhPho();
+    getDataTypeWork();
+
+    async function getDataThanhPho() {
+        const response = await fetch('https://provinces.open-api.vn/api/?depth=2')
+        const data = await response.json();
+        length = data.length;
+        var temp = "";
+        for (i = 0; i < length; i++) {
+            temp += "<option";
+            temp += " value='" + data[i].code + "'>";
+            temp += data[i].name + "</option>";
+        }
+
+        document.getElementById("locationThanhPho").innerHTML = temp;
+    }
+
+    let selectorThanhPho = document.getElementById("locationThanhPho")
+
+    async function getDataQuanHuyen() {
+        const response = await fetch('https://provinces.open-api.vn/api/?depth=2')
+        const data01 = await response.json();
+        length = data01.length;
+        let data02 = data01[0].districts;
+        for (i = 0; i < length; i++) {
+            if (data01[i].code == selectorThanhPho.value) {
+                data02 = data01[i].districts;
+                break;
+            }
+        }
+
+        var temp = "";
+        length2 = data02.length;
+        for (i = 0; i < length2; i++) {
+            temp += "<option";
+            temp += " value=" + data02[i].code + ">";
+            temp += data02[i].name + "</option>";
+        }
+
+        document.getElementById("locationQuanHuyen").innerHTML = temp;
+    }
+
+    selectorThanhPho.addEventListener('change', getDataQuanHuyen);
+
+    let select_hours = document.getElementById("hours");
+    select_hours.addEventListener('change', setDataIncome);
+
+    let select_quantity = document.getElementById("quantity");
+    select_quantity.addEventListener('change', setDataIncome);
+
+    let selector_typework = document.getElementById("typework");
+    selector_typework.addEventListener('change', setDataIncome);
+</script>
+
+</html>
